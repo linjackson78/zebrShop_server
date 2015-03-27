@@ -1,6 +1,8 @@
 var express = require("express")
 var app = express()
+var path = require("path")
 var bodyParser = require('body-parser')
+var multer = require('multer'); 
 var mongoose = require("mongoose")
 var db = mongoose.connect("mongodb://104.236.143.76:27017")
 var ObjectId = mongoose.Schema.Types.ObjectId;
@@ -59,34 +61,26 @@ var Item = mongoose.model("Item", itemSchema)
 var User = mongoose.model("User", userSchema)
 var Order = mongoose.model("Order", orderSchema)
 
-/*var item = new Item();
-item.type = "t-shirt";
-item.brand = "H&M";
-item.price = 200;
-item.imageUrl = "/img/pants.jpg";
-item.inventory = 200;
-item.save(function(err){
-	console.log(err)
-})*/
-
 app.use(bodyParser.json());
+app.use(multer({dest: './img/'}))
 app.use(express.static(__dirname));
+
 app.get('/user', function(req, res){
-	var user = User.findOne({name: req.username})
-	if (!user) {
-		console.log("Can't find user: %s", req.body.username)
-		res.json(genResJson.notOk(400, "User not exist."))
-		return;
-	}
-
-	if (user.name == req.body.username) {
-		console.log("A user Log-in validated.")
-		res.json(genResJson.ok())
-	} else {
-		res.json(genResJson.notOk(400, "Username/password not match."))
-	}
+	User.findOne({name: req.query.username}, function(err, user){
+		if (!user) {
+			console.log("Can't find user: %s", req.query.username)
+			res.json(genResJson.notOk(400, "用户不存在"))
+			return;
+		}
+		if (user.pwd == req.query.pwd) {
+			console.log("A user Log-in validated.")
+			res.json(genResJson.ok("200", user))
+		} else {
+			res.json(genResJson.notOk(400, "用户名/密码不匹配"))
+		}
+	})
+	
 });
-
 app.post("/user", function(req, res){
 	var query = User.findOne({name: req.body.username})
 	if (query) {
@@ -106,10 +100,39 @@ app.post("/user", function(req, res){
 		res.json(genResJson.ok())
 	})
 })
-
+.put("/user", function(req, res){
+	console.log(req.body)
+	User.update({_id: req.body._id}, req.body, {}, function(err){
+		res.json(genResJson.ok())
+	})
+})
 app.get('/items', function(req, res){
-	Item.find({}, function(err, items){
+	Item.find({}, null, {sort: {date: -1}},  function(err, items){
 		res.json(items)
+	})
+})
+app.post('/items', function(req, res){
+	var item = new Item(req.body)
+	item.imageUrl = "/" + req.files.file.path.replace(/\\/, "/");
+	item.save(function(err){
+		if (err) res.json(genResJson.notOk())
+		res.json(genResJson.ok())
+	})
+})
+app.put('/items', function(req, res){
+	Item.update({_id: req.body._id}, req.body, {}, function(err){
+		res.json(genResJson.ok())
+	})
+})
+app.delete('/items/:id', function(req, res){
+	console.log(req.params)
+	Item.find({_id: req.params.id}).remove(function(err){
+		if (err) {
+			res.json(genResJson.notOk(500, "Database Error:" + err))
+			return;
+		}
+		console.log("An item deleted.")
+		res.json(genResJson.ok())
 	})
 })
 
@@ -118,7 +141,7 @@ app.get('/orders', function(req, res){
 	if (req.query.username) {
 		condition.username = req.query.username;
 	}
-	Order.find(condition, function(err, orders){
+	Order.find(condition, null, {sort: {date: -1}}, function(err, orders){
 		res.json(orders)
 	})
 })
@@ -143,13 +166,28 @@ app.delete("/orders/:id", function(req, res){
 	})
 })
 
+app.put("/orders", function(req, res){
+	console.log(req.body)
+	if (Array.isArray(req.body)){
+		console.log("Batch handling ORDER-PUT request.")
+		req.body.foreach(function(obj){
+			Order.update({_id: obj._id}, {done: obj.done})
+		})
+		res.json(genResJson.ok())
+	} else {
+		Order.update({_id: req.body._id}, {done: req.body.done}, {}, function(){
+			res.json(genResJson.ok())
+		})
+	}
+})
+
 app.listen(3000, function(){
 	console.log("listening on 3000")
 })
 
 var genResJson = {
-	ok: function(msg){
-		return {code:200, msg: msg || ""}
+	ok: function(code, data){
+		return {code:200, data: data || ""}
 	},
 	notOk: function(code, data){
 		return {code: code || 500, data: data || "Something's wrong"}
