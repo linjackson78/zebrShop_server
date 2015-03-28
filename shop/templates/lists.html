@@ -1,0 +1,27 @@
+<ion-view view-title="{{curType ? curType : '所有分类'}}">
+  <ion-content>
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="refreshCloth()">
+    </ion-refresher>
+    <ion-list>
+      <div class="list card" ng-repeat="list in lists | filter: curType ? curType : ''">
+
+        <div class="item item-avatar padding">
+          <h2>品牌：{{list.brand}}</h2>
+          <p>库存：{{list.inventory}}</p>
+        </div>
+
+        <div class="item item-image">
+          <img ng-src='{{genImgUrl(list.imageUrl)}}'>
+        </div>
+
+        <a class="item item-icon-left dark addBtn">
+          <i class="icon ion-plus-round padding" ng-click="add2Cart(list, $event)"></i>
+          添加到购物车
+        </a>
+
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>

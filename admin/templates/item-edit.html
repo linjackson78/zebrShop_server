@@ -1,0 +1,29 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">编辑条目</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="itemModalEdit.hide()">取消</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="submitEdit()">
+      <div class="list">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">品牌</span>
+          <input type="text" ng-model="curItem.brand">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">库存</span>
+          <input type="text" ng-model="curItem.inventory">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">价格</span>
+          <input type="text" ng-model="curItem.price">
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">确认修改</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

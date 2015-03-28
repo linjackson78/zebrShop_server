@@ -1,0 +1,19 @@
+<ion-modal-view ng-controller="user">
+  <ion-header-bar class="bar-stable">
+    <button class="button button-clear button-calm" ng-click="hideOrders()">返回</button>
+    <h1 class="title">{{user.username}}的订单</h1>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item ng-hide="$parent.orders[0]">
+      <h2>订单空空的</h2>
+      </ion-item>
+      <ion-item class="item" ng-repeat="order in orders">
+        <h2>订单号：{{order._id}}</h2>
+        <h2>总额：{{order.total}}</h2>
+        <h2>状态：{{order.done ? "完成" : "未完成"}}</h2>
+        <h2>日期：{{order.date}}</h2>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>

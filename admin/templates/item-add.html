@@ -1,0 +1,37 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">增加条目</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="itemModalAdd.hide()">取消</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="submitAdd()">
+      <div class="list">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">品牌</span>
+          <input type="text" ng-model="newItem.brand" required>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">库存</span>
+          <input type="number" ng-model="newItem.inventory" required>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">价格</span>
+          <input type="number" ng-model="newItem.price" required>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">分类</span>
+          <input type="text" ng-model="newItem.type" required>
+        </label>
+        <label class="item item-input item-inline">
+          <span class="input-label">照片</span>
+          <input type="file" onchange="angular.element(this).scope().addFile(this.files)" required>
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">提交条目</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

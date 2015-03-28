@@ -1,0 +1,33 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="toggleLogSign()">{{loginData.isSign ? "登录" : "注册" }}</button>
+    </div>
+    <h1 class="title">{{!loginData.isSign ? "登录" : "注册" }}</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="hideLogin()">关闭</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="doValidate()">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">用户名</span>
+          <input type="text" ng-model="loginData.username" placeholder="用户名">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">密码</span>
+          <input type="password" ng-model="loginData.pwd" placeholder="密码">
+        </label>
+        <label class="item item-input item-floating-label" ng-show="loginData.isSign">
+          <span class="input-label">两次输入密码{{loginData.password != loginData.repeatPassword ? "不一致" : "一致"}}</span>
+          <input type="password" ng-model="loginData.repeatPassword" placeholder="再输一次密码">
+        </label>
+
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">{{!loginData.isSign ? "登录" : "注册" }}</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

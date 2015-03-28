@@ -1,0 +1,27 @@
+<ion-view view-title="订单管理">
+  <ion-content>
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="getLatestOrders()">
+    </ion-refresher>
+    <ion-list can-swipe="true">
+      <ion-item class="item-remove-animate item-icon-right" ng-repeat="order in orders track by $index" type="item-text-wrap">
+        <h2>{{order.username}}的订单</h2>
+        <p>日期:{{order.date}}</p>
+        <p>金额:{{order.total}}</p>
+        <p>状态:{{order.done ? "完成" : "未完成"}}</p>
+        <i ng-show="order.done" class="icon ion-checkmark"></i>
+        <ion-option-button ng-hide="order.done" class="button-balanced" ng-click="edit(order, $index)">
+          完成
+        </ion-option-button>
+        <ion-option-button class="button-assertive" ng-click="remove(order, $index)">
+          删除
+        </ion-option-button>
+      </ion-item>
+      <ion-item class="item item-icon-left" ng-show="!orders[0]">
+      <h1>还没有订单</h1>
+      <i class="icon ion-sad-outline"></i>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
