@@ -4,7 +4,7 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope,$http, $ionicModal, $timeout, $ionicSideMenuDelegate, $ionicPopup) {
   var localServer = "http://127.0.0.1:3000"
   var remoteServer = "http://104.236.143.76:3000"
-  $scope.server = localServer;
+  $scope.server = remoteServer;
   $scope.cart = [];
   $scope.orders = [];
 

@@ -29,7 +29,7 @@ angular.module('starter.services', [])
   var localServer = "http://127.0.0.1:3000"
   var remoteServer = "http://104.236.143.76:3000"
   return {
-    server: localServer,
+    server: remoteServer,
     genImgUrl: function(path){
       return this.server + path;
     }
