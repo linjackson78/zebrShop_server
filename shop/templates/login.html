@@ -20,7 +20,7 @@
           <input type="password" ng-model="loginData.pwd" placeholder="密码">
         </label>
         <label class="item item-input item-floating-label" ng-show="loginData.isSign">
-          <span class="input-label">两次输入密码{{loginData.password != loginData.repeatPassword ? "不一致" : "一致"}}</span>
+          <span class="input-label">两次输入密码{{loginData.pwd != loginData.repeatPassword ? "不一致" : "一致"}}</span>
           <input type="password" ng-model="loginData.repeatPassword" placeholder="再输一次密码">
         </label>
 

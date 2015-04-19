@@ -1,0 +1,29 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">编辑条目</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="houseModalEdit.hide()">取消</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="submitEdit()">
+      <div class="list">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">订货会名称</span>
+          <input type="text" ng-model="curHouse.name">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">开始日期</span>
+          <input type="date" ng-model="curHouse.start">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">结束时间</span>
+          <input type="date" ng-model="curHouse.end">
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">确认修改</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

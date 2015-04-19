@@ -4,9 +4,10 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope,$http, $ionicModal, $timeout, $ionicSideMenuDelegate, $ionicPopup) {
   var localServer = "http://127.0.0.1:3000"
   var remoteServer = "http://104.236.143.76:3000"
-  $scope.server = remoteServer;
+  $scope.server = localServer;
   $scope.cart = [];
   $scope.orders = [];
+  $scope.houses = [{name:"test"}];
 
   $scope.refreshCloth = function(){
     $http.get($scope.server + "/items")
@@ -21,8 +22,20 @@ angular.module('starter.controllers', [])
       $scope.orders = data;
     })
   }
+  $scope.refreshHouses = function(){
+    $http.get($scope.server + "/houses")
+    .success(function(data){
+      $scope.houses = data
+      $scope.curHouse = data[0]
+    })
+  }
   $scope.curType = '';
   $scope.refreshCloth();
+  $scope.refreshHouses();
+
+  $scope.changeCurHouse = function(house){
+    $scope.curHouse = house
+  }
 
   $scope.genImgUrl = function(path) {
     return $scope.server + path
@@ -91,6 +104,10 @@ angular.module('starter.controllers', [])
 
   $scope.hideLogin = function(){
     $scope.loginModal.hide();
+  }
+
+  $scope.logout = function(){
+    $scope.user = [];
   }
 
   $scope.doValidate = function(){
@@ -167,45 +184,6 @@ angular.module('starter.controllers', [])
     $scope.ordersModal.remove();
   });
 
-})
-
-.filter('unique', function () {
-
-  return function (items, filterOn) {
-
-    if (filterOn === false) {
-      return items;
-    }
-
-    if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
-      var hashCheck = {}, newItems = [];
-
-      var extractValueToCompare = function (item) {
-        if (angular.isObject(item) && angular.isString(filterOn)) {
-          return item[filterOn];
-        } else {
-          return item;
-        }
-      };
-
-      angular.forEach(items, function (item) {
-        var valueToCheck, isDuplicate = false;
-
-        for (var i = 0; i < newItems.length; i++) {
-          if (angular.equals(extractValueToCompare(newItems[i]), extractValueToCompare(item))) {
-            isDuplicate = true;
-            break;
-          }
-        }
-        if (!isDuplicate) {
-          newItems.push(item);
-        }
-
-      });
-      items = newItems;
-    }
-    return items;
-  };
 })
 
 .controller('user', function($scope, $http, $ionicModal, $ionicLoading, $timeout, $ionicPopup){
@@ -301,4 +279,43 @@ angular.module('starter.controllers', [])
 })
 
 .controller('listCtrl', function($scope, $stateParams) {
-});
+})
+
+.filter('unique', function () {
+
+  return function (items, filterOn) {
+
+    if (filterOn === false) {
+      return items;
+    }
+
+    if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
+      var hashCheck = {}, newItems = [];
+
+      var extractValueToCompare = function (item) {
+        if (angular.isObject(item) && angular.isString(filterOn)) {
+          return item[filterOn];
+        } else {
+          return item;
+        }
+      };
+
+      angular.forEach(items, function (item) {
+        var valueToCheck, isDuplicate = false;
+
+        for (var i = 0; i < newItems.length; i++) {
+          if (angular.equals(extractValueToCompare(newItems[i]), extractValueToCompare(item))) {
+            isDuplicate = true;
+            break;
+          }
+        }
+        if (!isDuplicate) {
+          newItems.push(item);
+        }
+
+      });
+      items = newItems;
+    }
+    return items;
+  };
+})

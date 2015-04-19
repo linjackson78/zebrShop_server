@@ -6,7 +6,7 @@ var multer = require('multer');
 var mongoose = require("mongoose")
 var localMongo = "mongodb://127.0.0.1:27017"
 var remoteMongo = "mongodb://104.236.143.76:27017"
-var db = mongoose.connect(localMongo)
+var db = mongoose.connect(remoteMongo)
 var ObjectId = mongoose.Schema.Types.ObjectId;
 var schema = mongoose.Schema
 var itemSchema = new schema({
@@ -59,9 +59,29 @@ var userSchema = new schema({
 	orders: [orderSchema]
 })
 
+var houseSchema = new schema({
+	id: ObjectId,
+	name: {
+		type: String,
+		unique: true,
+		required: true,
+	},
+	start: {
+		type: Date,
+		required: true
+	},
+	end: {
+		type: Date,
+		required: true
+	}
+})
+
+
+
 var Item = mongoose.model("Item", itemSchema)
 var User = mongoose.model("User", userSchema)
 var Order = mongoose.model("Order", orderSchema)
+var House = mongoose.model("House",houseSchema)
 
 app.use(bodyParser.json());
 app.use(multer({dest: './img/'}))
@@ -181,6 +201,55 @@ app.put("/orders", function(req, res){
 			res.json(genResJson.ok())
 		})
 	}
+})
+app.get("/houses", function(req, res){
+	/*res.json([{"name": "test", "date": "2014"}])*/
+	var condition = {};
+	if (req.query.name) {
+		condition.name = req.query.name;
+	}
+	House.find(condition, null, {sort: {date: -1}}, function(err, orders){
+		res.json(orders)
+	})
+})
+app.post("/houses", function(req, res){
+	House.findOne({name: req.body.name}, function(err, data){
+		if (data) {
+			res.json(genResJson.notOk(400, "该订货会名字已被使用"))
+		} else {
+			var house = new House();
+			house.name = req.body.name;
+			house.start = new Date(req.body.start);
+			console.log(typeof house.start)
+			house.end = new Date(req.body.end);
+			house.save(function(err){
+				if (err) {
+					console.log(err)
+					res.json(genResJson.notOk(null, err))
+					return;
+				}
+				console.log("New house added.")
+				res.json(genResJson.ok())
+			})		
+		}
+	})
+	
+})
+app.put('/houses', function(req, res){
+	House.update({_id: req.body._id}, req.body, {}, function(err){
+		res.json(genResJson.ok())
+	})
+})
+app.delete("/houses/:id", function(req, res){
+	House.find({_id: req.params.id}).remove(function(err){
+		if (err) {
+			res.json(genResJson.notOk(500, "Database Error:" + err))
+			return;
+		}
+		console.log("An house deleted.")
+		res.json(genResJson.ok())
+
+	})
 })
 
 app.listen(3000, function(){

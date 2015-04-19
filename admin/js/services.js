@@ -4,6 +4,7 @@ angular.module('starter.services', [])
 
   var cloth = [];
   var orders = [];
+  var houses = [];
 
   return {
     allOrders: function() {
@@ -22,6 +23,14 @@ angular.module('starter.services', [])
         cloth = data;
       })
     },
+    allHouses: function(){
+      return houses;
+    },
+    refreshHouses: function () {
+      return $http.get(Util.server + "/houses").success(function(data){
+        houses = data;
+      })
+    }
   };
 })
 
@@ -29,7 +38,7 @@ angular.module('starter.services', [])
   var localServer = "http://127.0.0.1:3000"
   var remoteServer = "http://104.236.143.76:3000"
   return {
-    server: remoteServer,
+    server: localServer,
     genImgUrl: function(path){
       return this.server + path;
     }

@@ -36,6 +36,100 @@ angular.module('starter.controllers', [])
   	$scope.getLatestOrders();
 })
 
+.controller('HouseCtrl', function($scope, $http, $ionicModal, $ionicListDelegate, $ionicLoading, $ionicPopup,Data, Util) {
+	$scope.newHouse = {}
+	$scope.curHouse = {}
+
+	$ionicModal.fromTemplateUrl('templates/house-add.html', {
+	  scope: $scope,
+	  animation: 'slide-in-up'
+	}).then(function(modal) {
+	  $scope.houseModalAdd = modal;
+	});
+	$ionicModal.fromTemplateUrl('templates/house-edit.html', {
+	  scope: $scope,
+	  animation: 'slide-in-up'
+	}).then(function(modal) {
+	  $scope.houseModalEdit = modal;
+	});
+	$scope.showConfirm = function() {
+	  var confirmPopup = $ionicPopup.confirm({
+	    title: '确认删除',
+	    template: '是否删除订货会信息？',
+	    buttons: [
+	          { text: '否' },
+	          {
+	            text: '<b>是</b>',
+	            type: 'button-positive',
+	            onTap: function(){
+	            	return true
+	            }
+	          }
+	        ]
+	  });
+	  return confirmPopup.then(function(res) {
+	  	console.log(res)
+	    if(res) {
+	      $scope.confirmDelete = true
+	      console.log('true')
+	    } else {
+	      $scope.confirmDelete = false
+	    }
+	  });
+	};
+	$scope.edit = function(house){
+		$scope.curHouse = house;
+		$scope.curHouse.start = new Date(house.start)
+		$scope.curHouse.end = new Date(house.end)
+		console.log($scope.curHouse)
+		$ionicListDelegate.closeOptionButtons();
+		$scope.houseModalEdit.show();
+	}
+	$scope.remove = function(house, index){
+		$scope.showConfirm().then(function(){
+			if (!$scope.confirmDelete) {
+				return
+			}
+			$http.delete(Util.server + "/houses/" + house._id).success(function(data){
+				if (data.code == "200") {
+					$scope.houses.splice(index, 1)
+					Data.refreshHouses();
+					$ionicListDelegate.closeOptionButtons();
+				}
+			})	
+		})
+	}
+	$scope.getLatestHouses = function(){
+		Data.refreshHouses().then(function(){
+			$scope.houses = Data.allHouses();
+			$scope.$broadcast('scroll.refreshComplete')
+		})
+	}
+	$scope.submitAdd = function(){
+		$http.post(Util.server + "/houses", $scope.newHouse).success(function(data){
+			var tmp = ''
+			if(data.code == "200"){
+				tmp = "已经成功新建"
+				Data.refreshHouses().then(function(){
+					$scope.houses = Data.allHouses()
+				})
+			} else {
+				tmp = data.data
+			}
+			var alertPopup = $ionicPopup.alert({
+			  title: '操作状况',
+			  template: tmp
+			});
+		})
+	}
+	$scope.submitEdit =  function(){
+		$http.put(Util.server + "/houses", $scope.curHouse).success(function(data){
+			console.log(data)
+		})
+	}
+	$scope.getLatestHouses();
+})
+
 .controller('ClothCtrl', function($scope, $http, $ionicModal, $ionicListDelegate, $ionicLoading, Data, Util) {
 	$scope.curItem = {};
 	$scope.newItem = {
