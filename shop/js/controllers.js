@@ -7,8 +7,9 @@ angular.module('starter.controllers', [])
   $scope.server = localServer;
   $scope.cart = [];
   $scope.orders = [];
-  $scope.houses = [{name:"test"}];
-
+  $scope.houses = [];
+  $scope.curHouse = "所有会场"
+  $scope.curType = "所有分类"
   $scope.refreshCloth = function(){
     $http.get($scope.server + "/items")
     .success(function(data){
@@ -26,10 +27,8 @@ angular.module('starter.controllers', [])
     $http.get($scope.server + "/houses")
     .success(function(data){
       $scope.houses = data
-      $scope.curHouse = data[0]
     })
   }
-  $scope.curType = '';
   $scope.refreshCloth();
   $scope.refreshHouses();
 
@@ -42,6 +41,14 @@ angular.module('starter.controllers', [])
   }
   $scope.changeType = function(type){
     $scope.curType = type;
+    $ionicSideMenuDelegate.toggleLeft();
+  }
+  $scope.onTypeChange = function(curType){
+    $scope.curType = curType
+    $ionicSideMenuDelegate.toggleLeft();
+  }
+  $scope.onHouseChange = function(curHouse){
+    $scope.curHouse = curHouse
     $ionicSideMenuDelegate.toggleLeft();
   }
   $scope.data = {

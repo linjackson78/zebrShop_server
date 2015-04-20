@@ -9,6 +9,21 @@ var remoteMongo = "mongodb://104.236.143.76:27017"
 var db = mongoose.connect(remoteMongo)
 var ObjectId = mongoose.Schema.Types.ObjectId;
 var schema = mongoose.Schema
+
+var houseSchema = new schema({
+	_id: String,
+	start: {
+		type: Date,
+		required: true
+	},
+	end: {
+		type: Date,
+		required: true
+	},
+	descript: String,
+	location: String
+})
+
 var itemSchema = new schema({
 	id: ObjectId,
 	type: String,
@@ -22,7 +37,8 @@ var itemSchema = new schema({
 		default: 0
 	},
 	price: Number,
-	imageUrl: String
+	imageUrl: String,
+	house: {type: String, ref:'House'}
 })
 
 var orderSchema = new schema({
@@ -56,27 +72,7 @@ var userSchema = new schema({
 		phone: String,
 		recieverName: String,
 	},
-	orders: [orderSchema]
 })
-
-var houseSchema = new schema({
-	id: ObjectId,
-	name: {
-		type: String,
-		unique: true,
-		required: true,
-	},
-	start: {
-		type: Date,
-		required: true
-	},
-	end: {
-		type: Date,
-		required: true
-	}
-})
-
-
 
 var Item = mongoose.model("Item", itemSchema)
 var User = mongoose.model("User", userSchema)
@@ -123,7 +119,6 @@ app.post("/user", function(req, res){
 	})
 })
 .put("/user", function(req, res){
-	console.log(req.body)
 	User.update({_id: req.body._id}, req.body, {}, function(err){
 		res.json(genResJson.ok())
 	})
@@ -147,7 +142,6 @@ app.put('/items', function(req, res){
 	})
 })
 app.delete('/items/:id', function(req, res){
-	console.log(req.params)
 	Item.find({_id: req.params.id}).remove(function(err){
 		if (err) {
 			res.json(genResJson.notOk(500, "Database Error:" + err))
@@ -189,7 +183,6 @@ app.delete("/orders/:id", function(req, res){
 })
 
 app.put("/orders", function(req, res){
-	console.log(req.body)
 	if (Array.isArray(req.body)){
 		console.log("Batch handling ORDER-PUT request.")
 		req.body.foreach(function(obj){
@@ -205,22 +198,22 @@ app.put("/orders", function(req, res){
 app.get("/houses", function(req, res){
 	/*res.json([{"name": "test", "date": "2014"}])*/
 	var condition = {};
-	if (req.query.name) {
-		condition.name = req.query.name;
+	if (req.query.id) {
+		condition.id = req.query.id;
 	}
-	House.find(condition, null, {sort: {date: -1}}, function(err, orders){
-		res.json(orders)
+	House.find(condition, null, {sort: {date: -1}}, function(err, houses){
+		res.json(houses)
 	})
 })
 app.post("/houses", function(req, res){
-	House.findOne({name: req.body.name}, function(err, data){
+	console.log(req.body)
+	House.findOne({_id: req.body._id}, function(err, data){
 		if (data) {
 			res.json(genResJson.notOk(400, "该订货会名字已被使用"))
 		} else {
 			var house = new House();
-			house.name = req.body.name;
+			house._id = req.body._id;
 			house.start = new Date(req.body.start);
-			console.log(typeof house.start)
 			house.end = new Date(req.body.end);
 			house.save(function(err){
 				if (err) {
@@ -228,15 +221,20 @@ app.post("/houses", function(req, res){
 					res.json(genResJson.notOk(null, err))
 					return;
 				}
-				console.log("New house added.")
 				res.json(genResJson.ok())
 			})		
 		}
 	})
 	
 })
-app.put('/houses', function(req, res){
-	House.update({_id: req.body._id}, req.body, {}, function(err){
+app.put('/houses/:id', function(req, res){
+	console.log(req.body)
+	House.update({_id: req.params.id}, req.body, {}, function(err){
+		if (err) {
+			console.log(err)
+			res.json(genResJson.notOk(400, err))
+			return
+		}
 		res.json(genResJson.ok())
 	})
 })
@@ -246,7 +244,6 @@ app.delete("/houses/:id", function(req, res){
 			res.json(genResJson.notOk(500, "Database Error:" + err))
 			return;
 		}
-		console.log("An house deleted.")
 		res.json(genResJson.ok())
 
 	})

@@ -40,26 +40,32 @@
         <i class="icon ion-person"></i>
         </ion-item> -->
         <ion-item ng-show="user.isLogin" class="item item-icon-right" ng-click="showOrders()">
-        {{user.name}}的订单
+          {{user.name}}的订单
         <i class="icon ion-ios-pricetag"></i>
         </ion-item>
-        <ion-item  ng-click="changeType('')">
+        <!-- <ion-item  ng-click="changeType('')">
           全部
         </ion-item>
         <ion-item ng-repeat="list in lists | unique:'type'" ng-click="changeType(list.type)">
           {{list.type}}
-        </ion-item>
-
+        </ion-item> -->
         <div class="item item-divider">
-            订货会
-          </div>
-
+          种类
+        </div>
         <ion-item>
-          <select ng-model="curHouse"
-                  ng-options="house.name for house in houses"
-                  ng-change="changeCurHouse(curHouse)">
+          <select ng-model="curType" ng-change="onTypeChange(curType)">
+            <option>所有分类</option>
+            <option ng-repeat="item in lists | unique:'type'">{{item.type}}</option>
           </select>
-
+        </ion-item>
+        <div class="item item-divider">
+          订货会
+        </div>
+        <ion-item>
+          <select ng-model="curHouse" ng-change="onHouseChange(curHouse)">
+            <option>所有会场</option>
+            <option ng-repeat="house in houses">{{house._id}}</option>
+          </select>
         </ion-item>
         
       </ion-list>

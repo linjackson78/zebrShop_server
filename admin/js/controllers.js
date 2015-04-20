@@ -79,9 +79,9 @@ angular.module('starter.controllers', [])
 	};
 	$scope.edit = function(house){
 		$scope.curHouse = house;
+		$scope.oldHouseId = house._id
 		$scope.curHouse.start = new Date(house.start)
 		$scope.curHouse.end = new Date(house.end)
-		console.log($scope.curHouse)
 		$ionicListDelegate.closeOptionButtons();
 		$scope.houseModalEdit.show();
 	}
@@ -112,6 +112,7 @@ angular.module('starter.controllers', [])
 				tmp = "已经成功新建"
 				Data.refreshHouses().then(function(){
 					$scope.houses = Data.allHouses()
+					$scope.houseModalAdd.hide()
 				})
 			} else {
 				tmp = data.data
@@ -123,8 +124,20 @@ angular.module('starter.controllers', [])
 		})
 	}
 	$scope.submitEdit =  function(){
-		$http.put(Util.server + "/houses", $scope.curHouse).success(function(data){
-			console.log(data)
+		$http.put(Util.server + "/houses/" + $scope.oldHouseId, $scope.curHouse).success(function(data){
+			if(data.code == "200"){
+				tmp = "已经成功更改"
+				Data.refreshHouses().then(function(){
+					$scope.houses = Data.allHouses()
+					$scope.houseModalEdit.hide()
+				})
+			} else {
+				tmp = data.data
+			}
+			var alertPopup = $ionicPopup.alert({
+			  title: '操作状况',
+			  template: tmp
+			});
 		})
 	}
 	$scope.getLatestHouses();
@@ -154,7 +167,6 @@ angular.module('starter.controllers', [])
 	}
 	$scope.edit = function(item){
 		$scope.curItem = item;
-		console.log($scope.curItem)
 		$ionicListDelegate.closeOptionButtons();
 		$scope.itemModalEdit.show();
 	}
@@ -169,7 +181,7 @@ angular.module('starter.controllers', [])
 	}
 	$scope.submitEdit = function(){
 		$http.put(Util.server + "/items", $scope.curItem).success(function(){
-			getLatestCloth();
+			$scope.getLatestCloth();
 			$scope.itemModalEdit.hide();
 		})
 	}
@@ -178,9 +190,12 @@ angular.module('starter.controllers', [])
 		if (!$scope.newItem.fd) $scope.newItem.fd = new FormData();
 		for (key in $scope.newItem) {
 			if (key == "fd") continue;
+			/*if (key == "house") {
+				$scope.newItem.fd.append("house", $scope.newItem[key]._id)
+				continue
+			}*/
 			$scope.newItem.fd.append(key, $scope.newItem[key])
 		}
-		console.log($scope.newItem.fd)
 		$http.post(Util.server + "/items", $scope.newItem.fd, {
 			headers: {'Content-Type': undefined },
 		}).success(function(data){
@@ -201,7 +216,12 @@ angular.module('starter.controllers', [])
 	$scope.getLatestCloth = function (){
 		Data.refreshCloth().then(function(){
 			$scope.cloth = Data.allCloth();
-			$scope.$broadcast('scroll.refreshComplete');
+			Data.refreshHouses().then(function(){
+				$scope.houses = Data.allHouses()
+				$scope.newItem.house = $scope.houses[0]
+				$scope.$broadcast('scroll.refreshComplete');
+			})
+			
 		})
 	}
 	$scope.getLatestCloth();

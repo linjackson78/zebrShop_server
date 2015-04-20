@@ -9,6 +9,12 @@
     <form ng-submit="submitEdit()">
       <div class="list">
         <label class="item item-input item-stacked-label">
+          <span class="input-label">订货会</span>
+          <select ng-model="curItem.house">
+            <option ng-repeat="house in houses">{{house._id}}</option>
+          </select>
+        </label>
+        <label class="item item-input item-stacked-label">
           <span class="input-label">品牌</span>
           <input type="text" ng-model="curItem.brand">
         </label>

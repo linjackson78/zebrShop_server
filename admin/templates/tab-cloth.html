@@ -9,6 +9,7 @@
         <img ng-src="{{genImgUrl(item.imageUrl)}}">
         <h2>{{item.brand}}:{{item.type}}</h2>
         <p>库存{{item.inventory}}</p>
+        <p>会场：{{item.house ? item.house : "暂无"}}</p>
         <ion-option-button class="button-positive" ng-click="edit(item, $index)">
           编辑
         </ion-option-button>

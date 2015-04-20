@@ -1,11 +1,11 @@
-<ion-view view-title="{{curType ? curType : '所有分类'}}">
+<ion-view view-title='{{curType}} - {{curHouse}}'>
   <ion-content>
     <ion-refresher
       pulling-text="下拉刷新..."
       on-refresh="refreshCloth()">
     </ion-refresher>
     <ion-list>
-      <div class="list card" ng-repeat="list in lists | filter: curType ? curType : ''">
+      <div class="list card" ng-repeat="list in lists | filter: {type:curType == '所有分类' ? '' : curType, house: curHouse == '所有会场' ? '' : curHouse} ">
 
         <div class="item item-avatar padding">
           <h2>品牌：{{list.brand}}</h2>
