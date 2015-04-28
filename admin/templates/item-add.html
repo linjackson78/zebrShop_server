@@ -1,44 +1,69 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">增加条目</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="itemModalAdd.hide()">取消</button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="submitAdd()">
-      <div class="list">
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">订货会</span>
-          <select ng-model="newItem.house">
-            <option ng-repeat="house in houses">{{house._id}}</option>
-          </select>
-        </label>
-        
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">品牌</span>
-          <input type="text" ng-model="newItem.brand" required>
-        </label>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">库存</span>
-          <input type="number" ng-model="newItem.inventory" required>
-        </label>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">价格</span>
-          <input type="number" ng-model="newItem.price" required>
-        </label>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">分类</span>
-          <input type="text" ng-model="newItem.type" required>
-        </label>
-        <label class="item item-input item-inline">
-          <span class="input-label">照片</span>
-          <input type="file" onchange="angular.element(this).scope().addFile(this.files)" required>
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit">提交条目</button>
-        </label>
-      </div>
-    </form>
-  </ion-content>
+    <ion-header-bar>
+        <h1 class="title">增加条目</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="itemModalAdd.hide()">取消</button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <form ng-submit="submitAdd()">
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">订货会</span>
+                    <select ng-model="newItem.house">
+                        <option ng-repeat="house in houses">{{house._id}}</option>
+                    </select>
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">分类</span>
+                    <select ng-model="newItem.type">
+                        <option ng-repeat="(typeName, alias) in typeMap">{{typeName}}</option>
+                    </select>
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">年份</span>
+                    <select ng-model="newItem.year">
+                        <option ng-repeat="(year, alias) in yearMap">{{year}}</option>
+                    </select>
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">材料</span>
+                    <select ng-model="newItem.material">
+                        <option ng-repeat="(typeName, alias) in materialMap">{{typeName}}</option>
+                    </select>
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">品名</span>
+                    <input type="text" ng-model="newItem.name">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">品牌</span>
+                    <input type="text" ng-model="newItem.brand">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">库存</span>
+                    <input type="number" ng-model="newItem.inventory">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">价格</span>
+                    <input type="number" ng-model="newItem.price">
+                </label>
+                <label class="item item-input item-inline">
+                    <span class="input-label">照片</span>
+                    <input type="file" onchange="angular.element(this).scope().addFile(this.files)">
+                </label>
+                <div class="item item-divider">
+                    选择颜色
+                </div>
+                <ion-checkbox ng-repeat="color in colorArr" ng-model="color.checked" class="{{'checkbox-' + color.class}}">{{color.name}}</ion-checkbox>
+                <div class="item item-divider">
+                    选择尺寸
+                </div>
+                <ion-checkbox ng-repeat="size in sizeArr" ng-model="size.checked">{{size.name}}</ion-checkbox>
+                <label class="item">
+                    <button class="button button-block button-positive" type="submit">提交条目</button>
+                </label>
+            </div>
+        </form>
+    </ion-content>
 </ion-modal-view>

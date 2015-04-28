@@ -17,12 +17,7 @@ angular.module('starter.controllers', [])
       $scope.$broadcast('scroll.refreshComplete');
     })
   }
-  $scope.refreshOrders = function(){
-    $http.get($scope.server + "/orders?username="+ $scope.user.name)
-    .success(function(data){
-      $scope.orders = data;
-    })
-  }
+  
   $scope.refreshHouses = function(){
     $http.get($scope.server + "/houses")
     .success(function(data){
@@ -54,7 +49,7 @@ angular.module('starter.controllers', [])
   $scope.data = {
     number: 1,
   };
-  $scope.user = {/*"_id":"551383808492a7902d2b5fe5","pwd":"zebr","name":"zebr","__v":0,"orders":[],  isLogin: true, */personInfo: {}}
+  $scope.user = {"_id":"551383808492a7902d2b5fe5","pwd":"zebr","name":"zebr","__v":0,"orders":[],  isLogin: true, personInfo: {}}
   $scope.total = function(){
     var result = 0;
     $scope.cart.forEach(function(obj){
@@ -193,13 +188,26 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('user', function($scope, $http, $ionicModal, $ionicLoading, $timeout, $ionicPopup){
+.controller('user', function($scope, $http, $ionicModal, $ionicLoading, $timeout, $ionicPopup, $stateParams){
   $ionicModal.fromTemplateUrl('templates/submit.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
       $scope.modal = modal;
     });
+  $scope.refreshOrders = function(){
+    return $http.get($scope.server + "/orders?username=" + $scope.user.name)
+    .success(function(data){
+      $scope.orders = data;
+    })
+  }
+  if (!$scope.curOrder){
+    $scope.refreshOrders().then(function(){
+      if ($stateParams.index !== undefined) {
+        $scope.curOrder = $scope.orders[$stateParams.index]
+      }
+    })
+  }
   $scope.doSubmit = function(){
     if (!$scope.cart[0]) {
       $ionicPopup.alert({
@@ -285,7 +293,8 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('listCtrl', function($scope, $stateParams) {
+.controller('order', function($scope, $stateParams) {
+  console.log($stateParams.id)
 })
 
 .filter('unique', function () {

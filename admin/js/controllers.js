@@ -144,6 +144,15 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ClothCtrl', function($scope, $http, $ionicModal, $ionicListDelegate, $ionicLoading, Data, Util) {
+	$scope.materialMap = Data.materialMap
+	$scope.typeMap = Data.typeMap
+	$scope.yearMap = {
+		2014: "14",
+		2015: "15",
+		2016: "16",
+	}
+	$scope.colorArr = Data.colorArr
+	$scope.sizeArr = Data.sizeArr
 	$scope.curItem = {};
 	$scope.newItem = {
 
@@ -196,6 +205,9 @@ angular.module('starter.controllers', [])
 			}*/
 			$scope.newItem.fd.append(key, $scope.newItem[key])
 		}
+		console.log($scope.sizeArr, $scope.colorArr)
+		$scope.newItem.fd.append("sizeArr", $scope.sizeArr)
+		$scope.newItem.fd.append("colorArr", $scope.colorArr)
 		$http.post(Util.server + "/items", $scope.newItem.fd, {
 			headers: {'Content-Type': undefined },
 		}).success(function(data){
