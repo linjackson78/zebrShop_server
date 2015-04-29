@@ -1,0 +1,48 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title">添加衣服</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="addModal.hide()">取消</button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <form ng-submit="confirmAdd()">
+            <div class="list card">
+                <div class="item item-avatar padding">
+                    <h2>品名：{{curItem.name}}</h2>
+                    <p>款号：{{curItem.codeNumber}}</p>
+                    <p>品牌：{{curItem.brand}}</p>
+                    <p>销量：{{curItem.sales}}</p>
+                </div>
+                <div class="item item-image">
+                    <img ng-src="{{genImgUrl(curItem.imageUrl)}}">
+                </div>
+            </div>
+            <div class="item item-divider">
+                选择颜色
+            </div>
+            <ion-radio ng-repeat="color in curItem.colorArr | filter: {checked: true}" ng-model="curItem.color" ng-value="color.name" name="color" class="{{color.class}}">{{color.name}}</ion-radio>
+            <div class="item item-divider">
+                选择尺寸
+            </div>
+            <ion-radio ng-repeat="size in curItem.sizeArr | filter: {checked: true}" ng-model="curItem.size" ng-value="size.name" name="size">{{size.name}}</ion-radio>
+            <div class="item item-divider">
+                输入预订的数量
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">数量</span>
+                <input type="number" ng-model="curItem.numInCart" value="1" min="1" max="'+ item.inventory + '">
+            </label>
+            <div class="item item-icon-left" href="#">
+                <i class="icon ion-social-yen"></i>
+                {{(curItem.numInCart ? curItem.numInCart : 0) * curItem.price}}
+                <span class="item-note">
+                  总额
+                </span>
+            </div>
+            <label class="item">
+                <button class="button button-block button-positive" type="submit">添加至购物车</button>
+            </label>
+        </form>
+    </ion-content>
+</ion-modal-view>

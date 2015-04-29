@@ -3,31 +3,20 @@
         <ion-refresher pulling-text="下拉刷新..." on-refresh="refreshCloth()">
         </ion-refresher>
         <ion-list>
-            <div class="row" ng-repeat="list in lists" ng-if="$index % 3 === 0">
-                <div class="col col-33" ng-if="$index < lists.length">
-                    <img ng-src="{{genImgUrl(lists[$index].imageUrl)}}" width="100%" />
-                    <p>{{lists[$index]}}</p>
+            <ion-item class="item-icon-left" ng-show="!lists[0]">当前没有商品 <i class="icon ion-alert"></i></ion-item>
+            <div class="row" ng-repeat="item in lists | filter: {type:curType == '所有分类' ? '' : curType} | filter: filterByHouse" ng-if="$index % 2 === 0">
+                <div class="col col-50 list" ng-if="$index < lists.length" ng-click="add2Cart(lists[$index])">
+                    <ion-item>{{lists[$index].name}}</ion-item>
+                    <ion-item><img ng-src="{{genImgUrl(lists[$index].imageUrl)}}" width="100%" /></ion-item>
+                    <ion-item>单价：{{lists[$index].price}}
+                        <br/>已销量：{{lists[$index].sales}}</ion-item>
                 </div>
-                <div class="col col-33" ng-if="$index + 1 < lists.length">
+                <div class="col col-50 list" ng-if="$index + 1 < lists.length" ng-click="add2Cart(lists[$index+1])">
+                    <ion-item>{{lists[$index+1].name}}</ion-item>
                     <img ng-src="{{genImgUrl(lists[$index + 1].imageUrl)}}" width="100%" />
-                    <p>{{lists[$index+1]}}</p>
+                    <ion-item>单价：{{lists[$index + 1].price}}
+                        <br/>已销量：{{lists[$index + 1].sales}}</ion-item>
                 </div>
-                <div class="col col-33" ng-if="$index + 2 < lists.length">
-                    <img ng-src="{{genImgUrl(lists[$index + 2].imageUrl)}}" width="100%" />
-                    <p>{{lists[$index+2]}}</p>
-                </div>
-            </div>
-            <div class="list card" ng-repeat="list in lists | filter: {type:curType == '所有分类' ? '' : curType, house: curHouse == '所有会场' ? '' : curHouse} ">
-                <div class="item item-avatar padding">
-                    <h2>品牌：{{list.brand}}</h2>
-                    <p>单价：{{list.price}}</p>
-                </div>
-                <div class="item item-image">
-                    <img ng-src='{{genImgUrl(list.imageUrl)}}'>
-                </div>
-                <a class="item item-icon-left dark addBtn">
-                    <i class="icon ion-plus-round padding" ng-click="add2Cart(list, $event)"></i> 添加到购物车
-                </a>
             </div>
         </ion-list>
     </ion-content>

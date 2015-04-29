@@ -47,14 +47,13 @@ var itemSchema = new schema({
     material: String,
     type: String,
     brand: String,
-    inventory: Number,
     date: {
         type: Date,
         default: Date.now
     },
     sales: {
         type: Number,
-        default: 0
+        default: Math.floor(Math.random() * 10000)
     },
     price: Number,
     imageUrl: String,
@@ -80,6 +79,8 @@ var orderSchema = new schema({
             ref: 'Item'
         },
         amount: Number,
+        color: String,
+        size: String
     }],
     done: {
         type: Boolean,
@@ -134,23 +135,25 @@ app.get('/user', function(req, res) {
 app.post("/user", function(req, res) {
         var query = User.findOne({
             name: req.body.username
-        })
-        if (query) {
-            res.json(genResJson.notOk(null, "Username already exist."))
-            return;
-        }
-        var user = new User();
-        user.name = req.body.username;
-        user.pwd = req.body.password;
-        user.save(function(err) {
-            if (err) {
-                console.log(err)
-                res.json(genResJson.notOk(null, err))
+        }, function(err, user) {
+            if (user) {
+                res.json(genResJson.notOk(null, "用户名已存在"))
                 return;
             }
-            console.log("New user added.")
-            res.json(genResJson.ok())
+            var user = new User();
+            user.name = req.body.username;
+            user.pwd = req.body.password;
+            user.save(function(err) {
+                if (err) {
+                    console.log(err)
+                    res.json(genResJson.notOk(null, err))
+                    return;
+                }
+                console.log("New user added.")
+                res.json(genResJson.ok())
+            })
         })
+
     })
     .put("/user", function(req, res) {
         User.update({
@@ -169,11 +172,19 @@ app.get('/items', function(req, res) {
     })
 })
 app.post('/items', function(req, res) {
+    console.log(req.files)
     req.body.codeNumber = req.body.year + typeMap[req.body.type] + materialMap[req.body.material] + Math.floor(Math.random() * 10000);
+    req.body.sizeArr = JSON.parse(req.body.sizeArr)
+    req.body.colorArr = JSON.parse(req.body.colorArr)
     var item = new Item(req.body)
     item.imageUrl = "/" + req.files.file.path.replace(/\\/, "/");
     item.save(function(err) {
-        if (err) res.json(genResJson.notOk())
+        if (err) {
+            console.log(err)
+            res.json(genResJson.notOk());
+            return;
+        }
+        console.log("an item added")
         res.json(genResJson.ok())
     })
 })
@@ -218,6 +229,14 @@ app.post("/orders", function(req, res) {
             res.json(genResJson.notOk(500, "Database Error:" + err))
             return;
         }
+        order.itemArr.forEach(function(item) {
+            Item.findOneAndUpdate({
+                _id: item.itemId
+            }, {
+                "$inc": {sales: item.amount}
+            }, null, function(err) {
+            })
+        })
         res.json(genResJson.ok())
     })
 })
@@ -237,7 +256,7 @@ app.delete("/orders/:id", function(req, res) {
 app.put("/orders", function(req, res) {
     if (Array.isArray(req.body)) {
         console.log("Batch handling ORDER-PUT request.")
-        req.body.foreach(function(obj) {
+        req.body.forEach(function(obj) {
             Order.update({
                 _id: obj._id
             }, {

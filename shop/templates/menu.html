@@ -29,26 +29,12 @@
         </ion-item>
         <ion-item ng-show="user.isLogin" class="item-icon-right" ng-click="logout()">
         注销
-        <i class="icon ion-person"></i>
+        <i class="icon ion-log-out"></i>
         </ion-item>
-        <!-- <ion-item ng-show="user.isLogin" class="item-icon-right" ng-click="">
-        个人设置
-        <i class="icon ion-person"></i>
-        </ion-item>
-        <ion-item ng-show="user.isLogin" class="item-icon-right" ng-click="">
-        通知
-        <i class="icon ion-person"></i>
-        </ion-item> -->
         <ion-item ng-show="user.isLogin" class="item item-icon-right" href="#app/orders" menu-toggle="left">
           {{user.name}}的订单
         <i class="icon ion-ios-pricetag"></i>
         </ion-item>
-        <!-- <ion-item  ng-click="changeType('')">
-          全部
-        </ion-item>
-        <ion-item ng-repeat="list in lists | unique:'type'" ng-click="changeType(list.type)">
-          {{list.type}}
-        </ion-item> -->
         <div class="item item-divider">
           种类
         </div>
@@ -67,7 +53,13 @@
             <option ng-repeat="house in houses">{{house._id}}</option>
           </select>
         </ion-item>
-        
+        <ion-item ng-show="curHouse!='所有会场'" class="item-icon-right item-text-wrap">
+          {{curHouseObj._id}}从{{curHouseObj.start | date: "yyyy-MM-dd"}}开始，截止至{{curHouseObj.end | date: "yyyy-MM-dd"}}
+        <i class="icon ion-ios-information"></i>
+        </ion-item>
+        <div class="item item-divider">订货指引</div>
+        <ion-radio ng-model="salesOrder" value="-1" ng-change="sort(-1)">热订款</ion-radio>
+        <ion-radio ng-model="salesOrder" value="1" ng-change="sort(1)">冷订款</ion-radio>
       </ion-list>
     </ion-content>
   </ion-side-menu>

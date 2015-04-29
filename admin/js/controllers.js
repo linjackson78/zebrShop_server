@@ -206,8 +206,9 @@ angular.module('starter.controllers', [])
 			$scope.newItem.fd.append(key, $scope.newItem[key])
 		}
 		console.log($scope.sizeArr, $scope.colorArr)
-		$scope.newItem.fd.append("sizeArr", $scope.sizeArr)
-		$scope.newItem.fd.append("colorArr", $scope.colorArr)
+		$scope.sizeArr
+		$scope.newItem.fd.append("sizeArr", JSON.stringify($scope.sizeArr).replace(/,"\$\$hashKey":"object:\d+"/g, ""))
+		$scope.newItem.fd.append("colorArr", JSON.stringify($scope.colorArr).replace(/,"\$\$hashKey":"object:\d+"/g, ""))
 		$http.post(Util.server + "/items", $scope.newItem.fd, {
 			headers: {'Content-Type': undefined },
 		}).success(function(data){

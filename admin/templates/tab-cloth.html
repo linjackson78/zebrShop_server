@@ -5,7 +5,7 @@
       on-refresh="getLatestCloth()">
     </ion-refresher>
     <ion-list can-swipe="true">
-      <ion-item class="item item-thumbnail-left" ng-repeat="item in cloth" type="item-text-wrap">
+      <ion-item class="item item-thumbnail-left" ng-repeat="item in cloth | orderBy: '-price' " type="item-text-wrap">
         <img ng-src="{{genImgUrl(item.imageUrl)}}">
         <h2>{{item.brand}}:{{item.type}}</h2>
         <p>库存{{item.inventory}}</p>

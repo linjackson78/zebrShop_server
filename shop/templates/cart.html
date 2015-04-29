@@ -1,20 +1,20 @@
 <ion-modal-view ng-controller="user">
-  <ion-header-bar class="bar-stable">
-    <button class="button button-clear button-calm" ng-click="hideCart()">返回</button>
-    <h1 class="title">购物车</h1>
-    <button class="button button-clear button-calm" ng-click="doSubmit()">提交</button>
-  </ion-header-bar>
-  <ion-content>
-    <ion-list>
-      <ion-item ng-hide="$parent.cart[0]">
-      <h2>购物车空空的</h2>
-      </ion-item>
-      <ion-item class="item item-avatar" ng-repeat="item in cart">
-        <img ng-src='{{genImgUrl(item.imageUrl)}}'>
-        <h2>{{item.brand}}:{{item.type}}</h2>
-        <span class="input-label">总额:{{item.numInCart * item.price}}元</span>
-        <span class>数量:<input type="number" ng-model="item.numInCart" min="1" max="{{item.inventory}}"></span>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+    <ion-header-bar class="bar-stable">
+        <button class="button button-clear button-calm" ng-click="hideCart()">返回</button>
+        <h1 class="title">购物车</h1>
+        <button class="button button-clear button-calm" ng-click="doSubmit()">提交</button>
+    </ion-header-bar>
+    <ion-content>
+        <ion-list>
+            <ion-item ng-hide="$parent.cart[0]">
+                <h2>购物车空空的</h2>
+            </ion-item>
+            <ion-item class="item item-avatar" ng-repeat="item in cart">
+                <img ng-src='{{genImgUrl(item.imageUrl)}}'>
+                <h2>{{item.brand}}:{{item.type}}</h2>
+                <span class="input-label">总额:{{item.numInCart * item.price}}元</span>
+                <span class>数量:<input type="number" ng-model="item.numInCart" min="1" max="{{item.inventory}}"></span>
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </ion-modal-view>

@@ -39,23 +39,23 @@ angular.module('starter.services', [])
         checked: false
     }]
     var colorArr = [{
-        name: "红",
+        name: "RED",
         checked: false,
         class: "assertive"
     }, {
-        name: "黑",
+        name: "BLACK",
         checked: false,
         class: "dark"
     }, {
-        name: "白",
+        name: "PURPLE",
         checked: false,
-        class: "light"
+        class: "royal"
     }, {
-        name: "灰",
+        name: "GREEN",
         checked: false,
-        class: "stable"
+        class: "balanced"
     }, {
-        name: "蓝",
+        name: "BLUE",
         checked: false,
         class: "positive"
     }]
