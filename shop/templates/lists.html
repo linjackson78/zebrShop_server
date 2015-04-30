@@ -1,21 +1,25 @@
 <ion-view view-title='{{curType}} - {{curHouse}}'>
     <ion-content>
-        <ion-refresher pulling-text="下拉刷新..." on-refresh="refreshCloth()">
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="refreshCloth();refreshHouses()">
         </ion-refresher>
         <ion-list>
+            <div class="bar bar-header item-input-inset">
+                <label class="item-input-wrapper">
+                    <i class="icon ion-ios-search placeholder-icon"></i>
+                    <input type="search" placeholder="搜索服装" ng-model="searchText">
+                </label>
+                <button class="button button-clear" ng-click="searchText=''">
+                    Cancel
+                </button>
+            </div>
             <ion-item class="item-icon-left" ng-show="!lists[0]">当前没有商品 <i class="icon ion-alert"></i></ion-item>
-            <div class="row" ng-repeat="item in lists | filter: {type:curType == '所有分类' ? '' : curType} | filter: filterByHouse" ng-if="$index % 2 === 0">
-                <div class="col col-50 list" ng-if="$index < lists.length" ng-click="add2Cart(lists[$index])">
-                    <ion-item>{{lists[$index].name}}</ion-item>
-                    <ion-item><img ng-src="{{genImgUrl(lists[$index].imageUrl)}}" width="100%" /></ion-item>
-                    <ion-item>单价：{{lists[$index].price}}
-                        <br/>已销量：{{lists[$index].sales}}</ion-item>
-                </div>
-                <div class="col col-50 list" ng-if="$index + 1 < lists.length" ng-click="add2Cart(lists[$index+1])">
-                    <ion-item>{{lists[$index+1].name}}</ion-item>
-                    <img ng-src="{{genImgUrl(lists[$index + 1].imageUrl)}}" width="100%" />
-                    <ion-item>单价：{{lists[$index + 1].price}}
-                        <br/>已销量：{{lists[$index + 1].sales}}</ion-item>
+            <div class="item {{$even ? 'item-thumbnail-left' : 'item-thumbnail-right'}}" ng-repeat="list in lists | filter: {type:curType == '所有分类' ? '' : curType} | filter:filterByHouse | filter:searchText" ng-click="add2Cart(list)">
+                <img ng-src="{{genImgUrl(list.imageUrl)}}">
+                <div class="{{$even ? padding-left : ''}}">
+                    <h2>{{list.name}}</h2>
+                    <p>款号：{{list.codeNumber}}</p>
+                    <p>销量：{{list.sales}}</p>
+                    <p>单价：{{list.price}}元</p>
                 </div>
             </div>
         </ion-list>

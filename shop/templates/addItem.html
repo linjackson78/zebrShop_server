@@ -12,6 +12,7 @@
                     <h2>品名：{{curItem.name}}</h2>
                     <p>款号：{{curItem.codeNumber}}</p>
                     <p>品牌：{{curItem.brand}}</p>
+                    <p>单价：{{curItem.price}}元</p>
                     <p>销量：{{curItem.sales}}</p>
                 </div>
                 <div class="item item-image">
@@ -34,8 +35,7 @@
                 <input type="number" ng-model="curItem.numInCart" value="1" min="1" max="'+ item.inventory + '">
             </label>
             <div class="item item-icon-left" href="#">
-                <i class="icon ion-social-yen"></i>
-                {{(curItem.numInCart ? curItem.numInCart : 0) * curItem.price}}
+                <i class="icon ion-social-yen"></i> {{(curItem.numInCart ? curItem.numInCart : 0) * curItem.price}}
                 <span class="item-note">
                   总额
                 </span>

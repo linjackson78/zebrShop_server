@@ -11,7 +11,10 @@
             </ion-item>
             <ion-item class="item item-avatar" ng-repeat="item in cart">
                 <img ng-src='{{genImgUrl(item.imageUrl)}}'>
-                <h2>{{item.brand}}:{{item.type}}</h2>
+                <h2>{{item.name}}</h2>
+                <p>款号：{{item.codeNumber}}</p>
+                <p>颜色：{{item.color}}</p>
+                <p>尺寸：{{item.size}}</p>
                 <span class="input-label">总额:{{item.numInCart * item.price}}元</span>
                 <span class>数量:<input type="number" ng-model="item.numInCart" min="1" max="{{item.inventory}}"></span>
             </ion-item>

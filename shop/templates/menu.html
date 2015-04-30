@@ -31,6 +31,10 @@
         注销
         <i class="icon ion-log-out"></i>
         </ion-item>
+        <ion-item ng-show="user.isLogin" class="item-icon-right" ng-click="editUserModal.show()">
+        个人设置
+        <i class="icon ion-gear-b"></i>
+        </ion-item>
         <ion-item ng-show="user.isLogin" class="item item-icon-right" href="#app/orders" menu-toggle="left">
           {{user.name}}的订单
         <i class="icon ion-ios-pricetag"></i>
@@ -54,7 +58,7 @@
           </select>
         </ion-item>
         <ion-item ng-show="curHouse!='所有会场'" class="item-icon-right item-text-wrap">
-          {{curHouseObj._id}}从{{curHouseObj.start | date: "yyyy-MM-dd"}}开始，截止至{{curHouseObj.end | date: "yyyy-MM-dd"}}
+          {{curHouseObj._id}}<br/>从{{curHouseObj.start | date: "yyyy-MM-dd"}}开始<br />截止至{{curHouseObj.end | date: "yyyy-MM-dd"}}
         <i class="icon ion-ios-information"></i>
         </ion-item>
         <div class="item item-divider">订货指引</div>

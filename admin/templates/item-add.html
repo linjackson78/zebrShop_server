@@ -34,19 +34,19 @@
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">品名</span>
-                    <input type="text" ng-model="newItem.name">
+                    <input type="text" ng-model="newItem.name" required>
                 </label>
-                <label class="item item-input item-stacked-label">
+                <label class="item item-input item-stacked-label" required>
                     <span class="input-label">品牌</span>
-                    <input type="text" ng-model="newItem.brand">
+                    <input type="text" ng-model="newItem.brand" required>
                 </label>
-                <label class="item item-input item-stacked-label">
+                <label class="item item-input item-stacked-label" required>
                     <span class="input-label">价格</span>
-                    <input type="number" ng-model="newItem.price">
+                    <input type="number" ng-model="newItem.price" required>
                 </label>
                 <label class="item item-input item-inline">
                     <span class="input-label">照片</span>
-                    <input type="file" onchange="angular.element(this).scope().addFile(this.files)">
+                    <input type="file" onchange="angular.element(this).scope().addFile(this.files)" required>
                 </label>
                 <div class="item item-divider">
                     选择颜色

@@ -13,11 +13,11 @@
       <div class="list">
         <label class="item item-input item-floating-label">
           <span class="input-label">用户名</span>
-          <input type="text" ng-model="loginData.username" placeholder="用户名">
+          <input type="text" ng-model="loginData.username" placeholder="用户名" required>
         </label>
         <label class="item item-input item-floating-label">
           <span class="input-label">密码</span>
-          <input type="password" ng-model="loginData.pwd" placeholder="密码">
+          <input type="password" ng-model="loginData.pwd" placeholder="密码" required>
         </label>
         <label class="item item-input item-floating-label" ng-show="loginData.isSign">
           <span class="input-label">两次输入密码{{loginData.pwd != loginData.repeatPassword ? "不一致" : "一致"}}</span>

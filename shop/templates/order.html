@@ -15,8 +15,11 @@
 
         <a class="item item-thumbnail-left" href="#">
           <img ng-src='{{genImgUrl(item.itemId.imageUrl)}}'>
-          <h2>数量：{{item.amount}}</h2>
-          <p>{{item.itemId.brand}}</p>
+          <h2>数量：{{item.amount}}元</h2>
+          <p>{{item.itemId.name}}</p>
+          <p>款号：{{item.codeNumber}}</p>
+          <p>尺寸：{{item.size}}</p>
+          <p>颜色：{{item.color}}</p>
         </a>
 
     </div>

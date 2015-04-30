@@ -4,11 +4,11 @@
       <ion-item ng-hide="$parent.orders[0]">
       <h2>订单空空的</h2>
       </ion-item>
-      <ion-item class="item" ng-repeat="order in orders track by $index" href="#app/orders/{{$index}}">
+      <ion-item class="item item-text-wrap" ng-repeat="order in orders track by $index" href="#app/orders/{{$index}}">
         <h2>订单号：{{order._id}}</h2>
-        <h2>总额：{{order.total}}</h2>
-        <h2>状态：{{order.done ? "完成" : "未完成"}}</h2>
-        <h2>日期：{{order.date | date}}</h2>
+        <p>总额：{{order.total}}</p>
+        <p>状态：{{order.done ? "完成" : "未完成"}}</p>
+        <p>日期：{{order.date | date:"yyyy-MM-dd"}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

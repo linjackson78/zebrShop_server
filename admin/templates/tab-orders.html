@@ -1,27 +1,51 @@
 <ion-view view-title="订单管理">
-  <ion-content>
-    <ion-refresher
-      pulling-text="下拉刷新..."
-      on-refresh="getLatestOrders()">
-    </ion-refresher>
-    <ion-list can-swipe="true">
-      <ion-item class="item-remove-animate item-icon-right" ng-repeat="order in orders track by $index" type="item-text-wrap">
-        <h2>{{order.username}}的订单</h2>
-        <p>日期:{{order.date}}</p>
-        <p>金额:{{order.total}}</p>
-        <p>状态:{{order.done ? "完成" : "未完成"}}</p>
-        <i ng-show="order.done" class="icon ion-checkmark"></i>
-        <ion-option-button ng-hide="order.done" class="button-balanced" ng-click="edit(order, $index)">
-          完成
-        </ion-option-button>
-        <ion-option-button class="button-assertive" ng-click="remove(order, $index)">
-          删除
-        </ion-option-button>
-      </ion-item>
-      <ion-item class="item item-icon-left" ng-show="!orders[0]">
-      <h1>还没有订单</h1>
-      <i class="icon ion-sad-outline"></i>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+    <ion-content>
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="getLatestOrders()">
+        </ion-refresher>
+        <ion-list>
+            <div class="bar bar-header item-input-inset">
+                <label class="item-input-wrapper">
+                    <i class="icon ion-ios-search placeholder-icon"></i>
+                    <input type="search" placeholder="搜索订单" ng-model="searchText">
+                </label>
+                <button class="button button-clear" ng-click="searchText=''">
+                    清空
+                </button>
+            </div>
+            <div class="card item-remove-animate" ng-repeat="order in orders  | filter: searchText">
+                <ion-item class="item-divider">{{order.username}}的订单</ion-item>
+                <ion-item class="item-icon-right item-text-wrap">
+                    <h2>单号：{{order._id}}</h2>
+                    <p>日期: {{order.date | date: "yyyy-MM-dd"}}</p>
+                    <p>金额: {{order.total}}</p>
+                    <p>状态: {{order.done ? "完成" : "未完成"}}</p>
+                    <p>收件人：{{order.personInfo.recieverName}}</p>
+                    <p>地址：{{order.personInfo.address}}</p>
+                    <p>电话：{{order.personInfo.phone}}</p>
+                    <i ng-show="order.done" class="icon ion-checkmark"></i>
+                </ion-item>
+                <ion-item class="item-thumbnail-left" ng-repeat="item in order.itemArr">
+                    <img ng-src="{{genImgUrl(item.itemId.imageUrl)}}">
+                    <h2>{{item.itemId.name}}</h2>
+                    <p>数量：{{item.amount}}</p>
+                    <p>颜色：{{item.color}}</p>
+                    <p>尺寸：{{item.size}}</p>
+                </ion-item>
+                <div class="button-bar">
+                    <div class="button button-clear button-balanced" ng-disabled="order.done" ng-click="edit(order, $index)">完成</div>
+                    <div class="button button-clear button-assertive" ng-click="remove(order, $index)">删除</div>
+                </div>
+                <ion-item class="item-divider"></ion-item>
+                <!-- <ion-option-button ng-hide="order.done" class="button-balanced" ng-click="edit(order, $index)">
+                        完成
+                    </ion-option-button>
+                    <ion-option-button class="button-assertive" ng-click="remove(order, $index)">
+                        删除
+                    </ion-option-button> -->
+            </div>
+            <ion-item class="item item-icon-left" ng-show="!orders[0]">
+                <h2>还没有订单</h2>
+                <i class="icon ion-sad-outline"></i>
+            </ion-item>
+    </ion-content>
 </ion-view>

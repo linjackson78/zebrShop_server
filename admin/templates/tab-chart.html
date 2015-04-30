@@ -1,0 +1,45 @@
+<ion-view view-title="订单管理">
+    <ion-content>
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="refreshData()">
+        </ion-refresher>
+        <div class="list card">
+            <div class="item item-divider">服装种类统计数据</div>
+            <div class="row">
+                <div class="col">种类名称</div>
+                <div class="col">总金额</div>
+                <div class="col">总金额占比％</div>
+                <div class="col">总数量</div>
+                <div class="col">总数量占比％</div>
+            </div>
+            <div class="row" ng-repeat="a in amountData">
+                <div class="col">{{a.label}}</div>
+                <div class="col">{{moneyData[$index].value}}</div>
+                <div class="col">{{data.datasets[1].data[$index]}}</div>
+                <div class="col">{{amountData[$index].value}}</div>
+                <div class="col">{{data.datasets[0].data[$index]}}</div>
+            </div>
+            <div class="item item-divider"></div>
+        </div>
+        <div class="list card">
+            <div class="item item-divider">服装数量饼状图（单位：件）</div>
+            <div class="item item-image">
+                <canvas class="padding" piechart options=options responsive=true data="amountData" width="300" height="300"></canvas>
+            </div>
+            <div class="item item-divider"></div>
+        </div>
+        <div class="list card">
+            <div class="item item-divider">服装金额饼状图（单位：元）</div>
+            <div class="item item-image">
+                <canvas class="padding" piechart options=options responsive=true data="moneyData" width="300" height="300"></canvas>
+            </div>
+            <div class="item item-divider"></div>
+        </div>
+        <div class="list card">
+            <div class="item item-divider">服装金额占比与数量占比雷达图</div>
+            <div class="item item-image">
+                <canvas class="padding" radarchart options=options responsive=true data="data" width="300" height="300"></canvas>
+            </div>
+            <div class="item item-divider"></div>
+        </div>
+    </ion-content>
+</ion-view>

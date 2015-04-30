@@ -23,8 +23,8 @@
     </ion-item> -->
       <ion-item class="item-remove-animate item-icon-left" ng-repeat="house in houses track by $index" type="item-text-wrap">
         <h2>{{house._id}}</h2>
-        <p>开始日期:{{house.start}}</p>
-        <p>结束日期:{{house.end}}</p>
+        <p>开始日期: {{house.start | date: "yyyy-MM-dd"}}</p>
+        <p>结束日期: {{house.end | date: "yyyy-MM-dd"}}</p>
         <i class="icon ion-home"></i>
         <ion-option-button  class="button-balanced" ng-click="edit(house, $index)">
           编辑

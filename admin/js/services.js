@@ -1,7 +1,6 @@
 angular.module('starter.services', [])
 
 .factory('Data', function($http, Util) {
-
     var cloth = [];
     var orders = [];
     var houses = [];

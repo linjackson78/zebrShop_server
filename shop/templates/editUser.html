@@ -1,0 +1,33 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">编辑用户信息</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="editUserModal.hide()">取消</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form name="checkboxTest" ng-submit="putUser()">
+      <div class="list">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">收件人</span>
+          <input type="text" ng-model="user.personInfo.recieverName" required>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">地址</span>
+          <input type="text" ng-model="user.personInfo.address" required>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">电话号码</span>
+          <input type="text" ng-model="user.personInfo.phone" required>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">修改密码</span>
+          <input type="password" ng-model="user.newPwd">
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">确认修改</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

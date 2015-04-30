@@ -42,18 +42,17 @@ var itemSchema = new schema({
     id: ObjectId,
     codeNumber: String,
     name: String,
-    color: String,
-    size: String,
     material: String,
     type: String,
     brand: String,
+    year: String,
     date: {
         type: Date,
         default: Date.now
     },
     sales: {
         type: Number,
-        default: Math.floor(Math.random() * 10000)
+        default: 0
     },
     price: Number,
     imageUrl: String,
@@ -68,6 +67,9 @@ var itemSchema = new schema({
 var orderSchema = new schema({
     id: ObjectId,
     username: String,
+    personInfo: {
+
+    },
     date: {
         type: Date,
         default: Date.now
@@ -114,6 +116,31 @@ app.use(multer({
 }))
 app.use(express.static(__dirname));
 
+
+/*Item.aggregate({$group: {_id: "$type", label: {$first: "$type"}, sales: {$sum: "$sales"}, price: {$first: "$price"}}}).exec(function(err, data){
+    console.log(err)
+    console.log(data)
+})*/
+app.get('/chart/:case', function(req, res){
+    switch (req.params.case) {
+        case "type":
+            Item.aggregate({$group: {_id: "$type", type: {$first: "$type"}, amount: {$sum: "$sales"}, price: {$first: "$price"}}}).exec(function(err, data){
+                res.json(data)
+            })
+            break;
+        case "test":
+        default:
+            res.json(genResJson.notOk(404))
+    }
+});
+app.get('/admins', function(req, res){
+    if (req.query.pwd != "zebr324" || req.query.name != "zebr") {
+        res.json(genResJson.notOk(403, "验证错误"))
+    } else {
+        res.json(genResJson.ok())
+    }
+})
+
 app.get('/user', function(req, res) {
     User.findOne({
         name: req.query.username
@@ -142,7 +169,7 @@ app.post("/user", function(req, res) {
             }
             var user = new User();
             user.name = req.body.username;
-            user.pwd = req.body.password;
+            user.pwd = req.body.pwd;
             user.save(function(err) {
                 if (err) {
                     console.log(err)
@@ -156,10 +183,21 @@ app.post("/user", function(req, res) {
 
     })
     .put("/user", function(req, res) {
+        console.log(req.body)
+        var newUser = {}
+        newUser.personInfo = req.body.personInfo
+        if (req.body.newPwd) {
+            newUser.pwd = req.body.newPwd
+        }
         User.update({
-            _id: req.body._id
-        }, req.body, {}, function(err) {
-            res.json(genResJson.ok())
+            name: req.body.name
+        }, newUser, {}, function(err) {
+            if (err){
+                res.json(genResJson.notOk())
+            } else {
+                res.json(genResJson.ok())
+            }
+            
         })
     })
 app.get('/items', function(req, res) {
